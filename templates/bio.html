@@ -27,7 +27,7 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Country:</label>
-                        <input type="text" id="" name="dob" class="form-control" value="{{bio.country}}">
+                        <input type="text" id="" name="dob" class="form-control" placeholder="Nepal" value="{{bio.country}}">
                         {% comment %} <select id="" name="country" class="form-control">
                             {% for code, country_name in bio_update.country_list.items %}
                             <option value="{{ code }}" {% if bio_update.country == code %}selected{% endif %}>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                         <label for="title">Date of Birth:</label>
-                        <input type="text" id="" name="dob" class="form-control" value="{{bio.date_of_birth}}">
+                        <input type="text" id="" name="dob" class="form-control" placeholder="YYYY-MM-DD" value="{{bio.date_of_birth}}">
                     </div>
 
                     <button type="submit" class="btn btn-primary">Save</button>
