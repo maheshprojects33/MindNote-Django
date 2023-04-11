@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% if messages %}
+<div class="alert alert-danger" role="alert">
+    {% for message in messages %}
+    {{message}}
+    {% endfor %}
+</div>
+{% endif %}
+
+<!-- Main Content -->
+<div class="container my-5">
+    <h1 class="text-center mb-4">View Notes</h1>
+    <div class="row">
+        {% for titles in title reversed %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body dark-bg d-flex flex-column">
+                    <h5 class="card-title">{{ titles.title }}</h5>
+                    <p class="card-text flex-grow-1">{{ titles.note|truncatechars:60 }}</p>
+                    <div class="dark-bg" style="padding-bottom: 0rem; padding-left: 0rem;">
+                        <a href="{% url 'note-view' titles.pk %}" class="btn btn-primary btn-sm me-2">View</a>
+                        <a href="{% url 'note-edit' titles.pk %}" class="btn btn-success btn-sm me-2">Edit</a>
+                        <a href="{% url 'note-delete' titles.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                        <br>
+                        <small class="text-muted">Created @: {{titles.created_at}}</small>
+                        <br>
+                        <small class="text-muted">Modified @: {{titles.modified_at}}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="col-md-4 mb-4">
+            <div class="card h-100" >
+                <div class="card-body dark-bg d-flex align-items-center justify-content-center" style="display: flex;">
+                    
+                    <a href="{% url 'note-add' %}">
+                        <button type="button" class="btn btn-link">
+                            <p class="card-text text-center">
+                                <h2 class="card-title">ADD NOTE</h2>
+                            </p>
+                        </button>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

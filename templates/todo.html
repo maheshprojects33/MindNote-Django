@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container mt-5">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                {{message}}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="card p-3 dark-bg">
+                <h2 class="mb-3">To-Do List</h2>
+                <form action="{% url 'todo-add' %}" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo"
+                                required>
+                        </div>
+                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                            <input type="date" class="form-control" placeholder="Starts At" name="start">
+                        </div>
+                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                            <input type="date" class="form-control" placeholder="Deadline" name="deadline">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary mb-3">Add Item</button>
+
+
+                </form>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h5>Task</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Starts At</h5>
+                    </div>
+                    <div class="col-md-3">
+                        <h5>Deadline</h5>
+                    </div>
+                    
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        {% for todos in todo reversed %}
+                        <div class="form-check mb-3">
+
+                            <input class="form-check-input" type="checkbox" value="" id="" name="is_checked">
+
+                            <label class="form-check-label" for="defaultCheck1">
+                                {{todos.todo}}
+                            </label>
+                        </div>
+                        {% endfor %}
+
+                        <a href="">
+                            <button type="submit" class="btn btn-danger btn-block col-md-6">Delete Completed</button>
+                        </a>
+
+                    </div>
+                    <div class="col-md-3">
+                        {% for starts in start reversed %}
+                        <p>{{starts.start}}</p>
+                        {% endfor %}
+
+                    </div>
+                    <div class="col-md-3">
+                        {% for deadlines in deadline reversed %}
+                        <p>{{deadlines.deadline}}</p>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock content %}

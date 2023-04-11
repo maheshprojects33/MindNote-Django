@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!-- Main Content -->
+<div class="container my-5 ">
+  <h1 class="mb-4">Welcome, {{user.full_name}}</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card bg-dark">
+        <div class="card-body">
+          <h5 class="card-title">Notes</h5>
+          <p class="card-text">Create and organize your notes here.</p>
+
+          <a href="{% url 'note' %}" class="position-relative text-decoration-none text-white btn btn-primary">
+            View Notes
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ title_num }}
+            </span>
+          </a>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card bg-dark">
+        <div class="card-body">
+          <h5 class="card-title">To-Do List</h5>
+          <p class="card-text">Create and manage your to-do list here.</p>
+
+          <a href="{% url 'todo' %}" class="position-relative text-decoration-none text-white btn btn-primary">
+            View To-DO List
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ todo_num }}
+            </span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center mb-4">
+        <h1>Welcome to MindNote</h1>
+        <p>A simple note-taking and to-do list app.</p>
+      </div>
+      {% if messages %}
+      {% for message in messages %}
+        {{message}}
+      {% endfor %}
+      {% endif %}
+      <div class="card p-3 dark-bg">
+        <div class="text-center">
+          <h2 class="mb-3">Sign Up or Log In</h2>
+        </div>
+
+        <form action="" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            {{form.as_p}}
+          </div>
+          
+          <button class="btn btn-primary mr-3" type="submit" role="button">Sign Up</button>
+
+          <a href="{% url 'login' %}" class="btn btn-secondary" role="button">Log In</a>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid bg-dark text-light py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 ">
+            <h1 class="text-center mb-4">Add Bio</h1>
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                {{message}}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="card p-3 dark-bg">
+                <form method="POST" action="/bio-update/">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="title">Address:</label>
+                        <input type="text" id="title" name="address" class="form-control"
+                            placeholder="MangalBazar, Lalitpur" value="{{bio.address}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Phone:</label>
+                        <input type="text" id="title" name="phone" class="form-control" placeholder="9841000000"
+                            value="{{bio.phone}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Country:</label>
+                        <input type="text" id="" name="dob" class="form-control" value="{{bio.country}}">
+                        {% comment %} <select id="" name="country" class="form-control">
+                            {% for code, country_name in bio_update.country_list.items %}
+                            <option value="{{ code }}" {% if bio_update.country == code %}selected{% endif %}>
+                                {{ country_name }}</option>
+                            {% endfor %}
+                        </select> {% endcomment %}
+                    </div>
+                    <div class="form-group">
+                        <label for="title">Date of Birth:</label>
+                        <input type="text" id="" name="dob" class="form-control" value="{{bio.date_of_birth}}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
