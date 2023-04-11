@@ -109,12 +109,4 @@ def todo_add(request):
     return render(request, "todo.html")
 
 def todo_is_completed(request, pk):
-        is_completed = Todo.objects.all()
-        print(is_completed)
-        is_checked = request.POST['is_checked']
-        if request.method == 'POST':
-            is_checked = request.POST.get('is_checked')
-            if is_checked == 'on':
-                messages.info(request, "Checked")
-            else:
-                messages.info(request, "Unchecked")
+        pass
