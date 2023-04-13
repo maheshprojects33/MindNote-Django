@@ -6,6 +6,8 @@ from .models import User, Bio
 from core.models import Note, Todo
 from django.contrib import messages
 from .forms import BioForm
+import re
+
 
 
 def signup(request):
@@ -87,15 +89,20 @@ def bio_update(request):
         update_phone = request.POST.get('phone')
         update_country = request.POST.get('country')
         update_dob = request.POST.get('dob')
-        
-        user.address = update_address
-        user.phone = update_phone
-        user.country = update_country
-        user.date_of_birth = update_dob
 
-        user.save()
+        try:
+            user.address = update_address
+            user.phone = update_phone
+            user.country = update_country
+            if not re.match(r'^\d{4}-\d{2}-\d{2}$', update_dob):
+                raise ValueError('Please enter your birth date in the format YYYY-MM-DD')
+            
+            user.date_of_birth = update_dob
+            user.save()
 
-        messages.success(request, "Information Has Been Updated")
+            messages.success(request, "Information Has Been Updated")
+        except Exception as e:
+            messages.error(request, str(e))
 
         return redirect('bio')
     

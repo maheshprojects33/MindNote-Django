@@ -14,11 +14,10 @@
         integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-        integrity="sha512-cnE+RVr68ZKKmFbd8A86zDnxShdy1kRHxkrWgeQ8X9Yot0Aa+VZ0JrWngb/KzgzjFUK0/PvCzbh54W8QX+szBQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/all.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/all.min_flaticon.css' %}" />
 
     <title>MindNote</title>
 
@@ -96,7 +95,10 @@
             }, 3000);
         </script>
 
+        
 
+
+        {% block js %}{% endblock js %}
 
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">

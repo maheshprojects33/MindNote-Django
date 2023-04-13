@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="container mt-5">
+
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                {% for message in messages %}
+                {{message}}
+                {% endfor %}
+            </div>
+            {% endif %}
+            <div class="card p-3 dark-bg">
+                <h2 class="mb-3">Edit To-Do</h2>
+                <form action="/todo-edit/{{todo.pk}}/" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group row mb-3">
+                        <div class="col-md-6">
+                            <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo" required value='{{todo.todo}}'>
+                        </div>
+                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                            <input type="date" class="form-control" placeholder="Starts At" name="start" value="{{ todo.start|date:'Y-m-d' }}">
+                        </div>
+                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                            <input type="date" class="form-control" placeholder="Deadline" name="deadline" value="{{todo.deadline|date:'Y-m-d'}}">
+                            
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-3">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+{% comment %} {% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid bg-dark text-light py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 ">
+            <h1 class="text-center mb-4">Edit To-Do</h1>
+            <div class="card p-3 dark-bg">
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="content">Edit Your Task Below:</label>
+                        <textarea id="content" name="note" class="form-control" rows="5" required
+                            placeholder="Enter Your Note Here...">{{todo.todo}}</textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} {% endcomment %}

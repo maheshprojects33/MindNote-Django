@@ -11,5 +11,8 @@ urlpatterns = [
     path('note-delete/<int:pk>/', views.note_delete, name="note-delete"),
     path('todo/', views.todo_home, name="todo"),
     path('todo-add/', views.todo_add, name="todo-add"),
+    path('todo-edit/<int:pk>/', views.todo_edit, name="todo-edit"),
+    path('todo-delete/<int:pk>/', views.todo_delete, name="todo-delete"),
+    path('todo-checked/<int:pk>/', views.todo_checked, name="todo-checked"),
     path('todo-complete/', views.todo_is_completed, name="todo-complete"),
 ]
