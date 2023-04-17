@@ -15,4 +15,5 @@ class Todo(models.Model):
     start = models.DateField(blank=True, null=True, default=None)
     deadline = models.DateField(blank=True, null=True, default=None)
     is_completed = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

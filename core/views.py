@@ -6,21 +6,11 @@ from django.contrib.auth.decorators import login_required
 import datetime
 
 
-# Create your views here.
-# def welcome(request):
-#     return render(request, "signup.html")
-
-# def login(request):
-#     pass
-
-# def signup(request):
-#     pass
-
 @login_required
 def note_home(request):
     title = Note.objects.filter(user=request.user)
 
-    return render(request, "note.html", {"title":title})
+    return render(request, "note.html", {"title": title})
 
 
 @login_required
@@ -65,7 +55,7 @@ def note_view(request, pk):
     if request.method == "POST":
         return redirect("/note/")
 
-    return render(request, "note_view.html", {"title":title})
+    return render(request, "note_view.html", {"title": title})
 
 
 @login_required
@@ -80,11 +70,9 @@ def note_delete(request, pk):
 
 @login_required
 def todo_home(request):
-    todo = Todo.objects.filter(user=request.user)
-    start = Todo.objects.filter(user=request.user)
-    deadline = Todo.objects.filter(user=request.user)
+    todo_display = Todo.objects.filter(user=request.user).order_by('-is_completed')
 
-    return render(request, "todo.html", {"todo": todo, "start": start, "deadline": deadline})
+    return render(request, "todo.html", {"todo_display": todo_display})
 
 
 @login_required
@@ -102,12 +90,14 @@ def todo_add(request):
         elif not start:
             Todo.objects.create(todo=todo, deadline=deadline, user=user)
         else:
-            Todo.objects.create(todo=todo, start=start, deadline=deadline, user=user)
+            Todo.objects.create(todo=todo, start=start,
+                                deadline=deadline, user=user)
 
         messages.success(request, "To-Do List Has Been Added Successfully")
 
         return redirect('/todo/')
     return render(request, "todo.html")
+
 
 @login_required
 def todo_edit(request, pk):
@@ -117,23 +107,23 @@ def todo_edit(request, pk):
         new_start = request.POST.get('start')
         new_deadline = request.POST.get('deadline')
 
-        
         if not new_start:
             todo.start = None
         if not new_deadline:
             todo.deadline = None
-        
+
         todo.todo = new_todo
         todo.start = new_start if new_start else todo.start
         todo.deadline = new_deadline if new_deadline else todo.deadline
 
         todo.save()
-        
+
         messages.success(request, "ToDo is updated Successfully")
 
         return redirect('/todo/')
 
     return render(request, "todo_edit.html", {"todo": todo})
+
 
 @login_required
 def todo_delete(request, pk):
@@ -149,24 +139,32 @@ def todo_delete(request, pk):
 def todo_checked(request, pk):
     todo = Todo.objects.filter(pk=pk, user=request.user).first()
 
-    print(todo.is_completed)
-    print("CLICKED DETECTED")
-
     if request.method == "POST":
         is_checked = request.POST.get('is_checked')
         if is_checked == 'on':
             todo.is_completed = True
         else:
             todo.is_completed = False
-        
+
         todo.save()
 
     return redirect("/todo/")
 
 
-
-
-
 @login_required
-def todo_is_completed(request, pk):
-        pass
+def todo_is_completed(request):
+    checked_todos = request.POST.getlist('checked_todos')
+    
+    for checked_todo in checked_todos:
+        todo = Todo.objects.get(id=checked_todo)
+
+        if todo.is_completed == False:
+            todo.is_completed = True
+            
+            todo.save()
+        else:
+            todo.is_completed = False
+            todo.save()
+    messages.info(request, "Todo Has Been Updated")
+
+    return redirect("/todo/")
