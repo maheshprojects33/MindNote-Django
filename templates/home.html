@@ -34,6 +34,13 @@
             </span>
           </a>
 
+          <a href="{% url 'todo' %}" class="position-relative text-decoration-none text-white btn btn-success">
+            Incomplete To-Do List
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+              {{ todo_incomplete }}
+            </span>
+          </a>
+
         </div>
       </div>
     </div>

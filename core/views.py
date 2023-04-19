@@ -135,29 +135,15 @@ def todo_delete(request, pk):
     return redirect("/todo/")
 
 
-@login_required
-def todo_checked(request, pk):
-    todo = Todo.objects.filter(pk=pk, user=request.user).first()
-
-    if request.method == "POST":
-        is_checked = request.POST.get('is_checked')
-        if is_checked == 'on':
-            todo.is_completed = True
-        else:
-            todo.is_completed = False
-
-        todo.save()
-
-    return redirect("/todo/")
-
 
 @login_required
 def todo_is_completed(request):
     checked_todos = request.POST.getlist('checked_todos')
+    print(checked_todos)
     
     for checked_todo in checked_todos:
         todo = Todo.objects.get(id=checked_todo)
-
+        
         if todo.is_completed == False:
             todo.is_completed = True
             

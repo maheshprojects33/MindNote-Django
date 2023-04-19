@@ -61,8 +61,7 @@ class Bio(models.Model):
     address = models.CharField(max_length=100, blank=True, null=True, default="n/a")
     phone = models.CharField(max_length=15, blank=True,
                              null=True, default="n/a")
-    country = models.CharField(
-        max_length=10, choices=country_list.items(), blank=True, null=True, default="Nepal")
+    country = models.CharField(max_length=10, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True, default="1990-01-01")
     user = models.ForeignKey(settings.AUTH_USER_MODEL,
                              on_delete=models.CASCADE)

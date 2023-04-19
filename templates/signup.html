@@ -10,9 +10,11 @@
         <p>A simple note-taking and to-do list app.</p>
       </div>
       {% if messages %}
-      {% for message in messages %}
+      <div class="alert alert-danger" role="alert">
+        {% for message in messages %}
         {{message}}
-      {% endfor %}
+        {% endfor %}
+      </div>
       {% endif %}
       <div class="card p-3 dark-bg">
         <div class="text-center">

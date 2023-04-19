@@ -1,111 +1,330 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
-
 <div class="container mt-5">
+  <div class="row">
+    <div class="col-md-10 offset-md-1">
+      {% if messages %}
+      <div class="alert alert-danger" role="alert">
+        {% for message in messages %}
+        {{message}}
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="card p-3 dark-bg">
+        <h2 class="mb-3">To-Do List</h2>
+        <form action="{% url 'todo-add' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group row mb-3">
+            <div class="col-md-12 col-lg-6">
+              <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo" required>
+            </div>
+            <div class="col-lg-3 mt-3 mt-lg-0">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Start</span>
+                </div>
+                <input type="date" class="form-control" name="start">
+              </div>
+            </div>
+            <div class="col-lg-3 mt-3 mt-lg-0">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">End</span>
+                </div>
+                <input type="date" class="form-control" name="deadline">
+              </div>
+            </div>
+          </div>
+          <div class="form-group row mb-3">
+            <div class="col-md-12">
+              <button type="submit" class="btn btn-primary btn-block">Add Item</button>
+            </div>
+          </div>
+        </form>
+        <div class="table-responsive">
+          <form method="POST" action="{% url 'todo-complete' %}">
+            {% csrf_token %}
+            <table class="table table-hover table">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th >Task</th>
+                  <th style="white-space: nowrap;">Starts At</th>
+                  <th>Deadline</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for todo in todo_display reversed %}
+                <tr>
+                  <td class="align-middle">
 
-    <div class="row">
-        <div class="col-md-10 offset-md-1">
-            {% if messages %}
-            <div class="alert alert-danger" role="alert">
-                {% for message in messages %}
-                {{message}}
+                    <div class="form-check">
+                      <input class="form-check-input" type="checkbox" value="{{ todo.id }}" id="checked_todo"
+                        name="checked_todos">
+                      <label class="form-check-label" for="checked_todo"></label>
+                    </div>
+
+                  </td>
+                  <td class="align-middle">
+                    {% if todo.is_completed %}
+                    <del style="color: red; font-style: italic;">{{ todo.todo }}</del>
+                    {% else %}
+                    {{ todo.todo }}
+                    {% endif %}
+                  </td>
+                  <td class="align-middle">{{ todo.start }}</td>
+                  <td class="align-middle">{{ todo.deadline }}</td>
+                  <td class="align-middle">
+                    <div class="d-flex justify-content-center">
+                      <a href="{% url 'todo-edit' todo.pk %}" class="btn btn-sm btn-info mr-2">
+                        Edit
+                      </a>
+                      <a href="{% url 'todo-delete' todo.pk %}" class="btn btn-sm btn-danger mr-2">
+                        Delete
+                      </a>
+                    </div>
+                  </td>
+                </tr>
                 {% endfor %}
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-danger btn-lg btn-block btn-block-sm">Mark As
+                  Completed/Incomplete
+                </button>
+              </div>
             </div>
-            {% endif %}
-            <div class="card p-3 dark-bg">
-                <h2 class="mb-3">To-Do List</h2>
-                <form action="{% url 'todo-add' %}" method="POST">
-                    {% csrf_token %}
-                    <div class="form-group row mb-3">
-                        <div class="col-md-6">
-                            <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo"
-                                required>
-                        </div>
-                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
-                            <input type="date" class="form-control" placeholder="Starts At" name="start">
-                        </div>
-                        <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
-                            <input type="date" class="form-control" placeholder="Deadline" name="deadline">
-                        </div>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary mb-3">Add Item</button>
-
-
-                </form>
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <h5>Task</h5>
-                    </div>
-                    <div class="col-md-2">
-                        <h5>Starts At</h5>
-                    </div>
-                    <div class="col-md-2">
-                        <h5>Deadline</h5>
-                    </div>
-                    <div class="col-md-2">
-                        <h5>Action</h5>
-                    </div>
-
-
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6">
-
-                        <form method="POST" action="/todo-complete/">
-                            {% csrf_token %}
-                            {% for checked in todo_display reversed %}
-                            <div class="form-check mb-3">
-
-                                <input class="form-check-input" type="checkbox" value="{{ checked.id }}"
-                                    id="checked_{{ checked.id }}" name="checked_todos">
-
-                                <label class="form-check-label" for="checked_{{ checked.id }}">
-                                    {% if checked.is_completed %}
-                                    <del style="color: red; font-style: italic;">{{ checked.todo }}</del>
-                                    {% else %}
-                                    {{ checked.todo }}
-                                    {% endif %}
-                                </label>
-                            </div>
-                            {% endfor %}
-
-                            <button type="submit" class="btn btn-danger btn-block col-md-8">Mark As Completed/Incomplete</button>
-
-                        </form>
-
-                    </div>
-                    <div class="col-md-2">
-                        {% for starts in todo_display reversed %}
-                        <p>{{starts.start}}</p>
-                        {% endfor %}
-                    </div>
-                    <div class="col-md-2">
-                        {% for deadlines in todo_display reversed %}
-                        <p>{{deadlines.deadline}}</p>
-                        {% endfor %}
-                    </div>
-
-                    <div class="col-md-2">
-                        {% for todos in todo_display reversed %}
-                        <p>
-                            <a href="{% url 'todo-edit' todos.pk %}"><i>Edit</i></a />
-                            |
-                            <a href="{%url 'todo-delete' todos.pk %}"><i class="flaticon-garbage">Delete</i></a>
-                        </p>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 </div>
-</div>
-
-
 
 {% endblock content %}
+
+
+{% comment %} <div class="text-center mt-3">
+  {% if todo_display.count > 0 %}
+  <p>{{ todo_display.count }} tasks remaining</p>
+  {% else %}
+  <p>All tasks completed!</p>
+  {% endif %} {% endcomment %}
+
+
+
+
+  {% comment %} <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+          {{message}}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="card p-3 dark-bg">
+          <h2 class="mb-3">To-Do List</h2>
+          <form action="{% url 'todo-add' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group row mb-3">
+              <div class="col-md-12 col-lg-6">
+                <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo" required>
+              </div>
+              <div class="col-md-6 col-lg-3 mt-3 mt-lg-0">
+                <input type="date" class="form-control" placeholder="Starts At" name="start">
+              </div>
+              <div class="col-md-6 col-lg-3 mt-3 mt-lg-0">
+                <input type="date" class="form-control" placeholder="Deadline" name="deadline">
+              </div>
+            </div>
+            <div class="form-group row mb-3">
+              <div class="col-md-12">
+                <button type="submit" class="btn btn-primary btn-block">Add Item</button>
+              </div>
+            </div>
+          </form>
+          <div class="table-responsive">
+            <table class="table table-hover table">
+              <thead>
+                <tr>
+                  <th>Task</th>
+                  <th>Starts At</th>
+                  <th>Deadline</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for todo in todo_display reversed %}
+                <tr>
+                  <td>
+                    {% if todo.is_completed %}
+                    <del style="color: red; font-style: italic;">{{ todo.todo }}</del>
+                    {% else %}
+                    {{ todo.todo }}
+                    {% endif %}
+                  </td>
+                  <td>{{ todo.start }}</td>
+                  <td>{{ todo.deadline }}</td>
+                  <td>
+                    <div class="d-flex justify-content-center delete-container">
+                      <a href="{% url 'todo-edit' todo.pk %}" class="btn btn-sm btn-info mr-2"></i> Edit</a>
+                      <form method="POST" action="{% url 'todo-delete' todo.pk %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-danger"><i class="fas fa-trash-alt"></i>
+                          Delete</button>
+                        <button type="submit" class="btn btn-sm btn-danger btn-delete">Delete</button>
+
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endcomment %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  {% comment %} <div class="container mt-5">
+
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+          {% for message in messages %}
+          {{message}}
+          {% endfor %}
+        </div>
+        {% endif %}
+        <div class="card p-3 dark-bg">
+          <h2 class="mb-3">To-Do List</h2>
+          <form action="{% url 'todo-add' %}" method="POST">
+            {% csrf_token %}
+            <div class="form-group row mb-3">
+              <div class="col-md-6">
+                <input type="text" class="form-control" placeholder="Enter Your Task Here..." name="todo" required>
+              </div>
+              <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                <input type="date" class="form-control" placeholder="Starts At" name="start">
+              </div>
+              <div class="col-md-3" style="padding-left: 10px;padding-right: 10px;">
+                <input type="date" class="form-control" placeholder="Deadline" name="deadline">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary mb-3">Add Item</button>
+
+
+          </form>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <h5>Task</h5>
+            </div>
+            <div class="col-md-2">
+              <h5>Starts At</h5>
+            </div>
+            <div class="col-md-2">
+              <h5>Deadline</h5>
+            </div>
+            <div class="col-md-2">
+              <h5>Action</h5>
+            </div>
+
+
+          </div>
+
+
+          <div class="row">
+            <div class="col-md-6">
+
+              <form method="POST" action="/todo-complete/">
+                {% csrf_token %}
+                {% for checked in todo_display reversed %}
+                <div class="form-check mb-3">
+
+                  <input class="form-check-input" type="checkbox" value="{{ checked.id }}" id="checked_{{ checked.id }}"
+                    name="checked_todos">
+
+                  <label class="form-check-label" for="checked_{{ checked.id }}">
+                    {% if checked.is_completed %}
+                    <del style="color: red; font-style: italic;">{{ checked.todo }}</del>
+                    {% else %}
+                    {{ checked.todo }}
+                    {% endif %}
+                  </label>
+                </div>
+                {% endfor %}
+
+                <button type="submit" class="btn btn-danger btn-block col-md-8">Mark As
+                  Completed/Incomplete</button>
+
+              </form>
+
+            </div>
+            <div class="col-md-2">
+              {% for starts in todo_display reversed %}
+              <p>{{starts.start}}</p>
+              {% endfor %}
+            </div>
+            <div class="col-md-2">
+              {% for deadlines in todo_display reversed %}
+              <p>{{deadlines.deadline}}</p>
+              {% endfor %}
+            </div>
+
+            <div class="col-md-2">
+              {% for todos in todo_display reversed %}
+              <p>
+                <a href="{% url 'todo-edit' todos.pk %}"><i>Edit</i></a />
+                |
+                <a href="{%url 'todo-delete' todos.pk %}"><i class="flaticon-garbage">Delete</i></a>
+              </p>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> {% endcomment %}

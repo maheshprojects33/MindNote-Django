@@ -6,6 +6,7 @@ from .models import User, Bio
 from core.models import Note, Todo
 from django.contrib import messages
 from .forms import BioForm
+from dateutil.parser import parse
 import re
 
 
@@ -20,6 +21,12 @@ def signup(request):
 
         if password1 != password2:
             messages.info(request, "Password Not Matched")
+            return redirect('signup')
+        
+        if len(password1) < 5:
+            messages.info(
+                request, "Please choose a password that is at least 5 characters long")
+            return redirect('signup') 
         
         if User.objects.filter(email=email.lower()).exists():
             messages.info(request, "User Already Exist")
@@ -68,10 +75,14 @@ def logout_user(request):
 def home(request):
     title = Note.objects.filter(user=request.user)
     title_num = len(title)
+
     todo = Todo.objects.filter(user=request.user)
     todo_num = len(todo)
+    
+    incomplete_items = Todo.objects.filter(user=request.user, is_completed=False)
+    todo_incomplete = incomplete_items.count()
 
-    return render(request, "home.html", {"title_num": title_num, "todo_num": todo_num})
+    return render(request, "home.html", {"title_num": title_num, "todo_num": todo_num, "todo_incomplete": todo_incomplete})
 
 
 @ login_required
@@ -94,9 +105,13 @@ def bio_update(request):
             user.address = update_address
             user.phone = update_phone
             user.country = update_country
-            if not re.match(r'^\d{4}-\d{2}-\d{2}$', update_dob):
-                raise ValueError('Please enter your birth date in the format YYYY-MM-DD')
             
+            # Parse the input date string
+            dob_datetime = parse(update_dob)
+            # Convert to string with the desired format
+            update_dob = dob_datetime.strftime('%Y-%m-%d')
+            # Convert back to string with the desired format
+                        
             user.date_of_birth = update_dob
             user.save()
 
